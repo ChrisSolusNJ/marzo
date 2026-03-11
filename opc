@@ -1,19 +1,13 @@
-import win32com.client
+C:\ParosMP16>python PRUEBA.py
+[MMC-MP16]Mes_ReporteParos[0,1,0] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,1] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,2] = 4.0
+[MMC-MP16]Mes_ReporteParos[0,1,3] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,4] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,5] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,6] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,7] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,8] = 0.0
+[MMC-MP16]Mes_ReporteParos[0,1,9] = 0.0
 
-opc = win32com.client.Dispatch("OPC.Automation.1")
-opc.Connect("RSLinx OPC Server")
-
-group = opc.OPCGroups.Add("Test")
-
-base = "[MMC-MP16]Mes_ReporteParos"
-
-for v in range(10):
-    tag = f"{base}[0,1,{v}]"
-
-    item = group.OPCItems.AddItem(tag, v)
-
-    valor, calidad, ts = item.Read(1)
-
-    print(tag, "=", valor)
-
-opc.Disconnect()
+C:\ParosMP16>
