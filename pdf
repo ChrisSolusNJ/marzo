@@ -1,3 +1,5 @@
+Tengo todo este codigo
+
 function planStyles(): array
 {
     return [
@@ -91,64 +93,7 @@ function agregarFilasPorClave(array $list): array
     return array_values($byClave);
 }
 
-function agruparPlanPorCategoriaProductoEtapa(array $dataPlanProduccion): array
-{
-    $porCategoria = [];
- 
-    // 1) Agrupar por categoría
-    foreach ($dataPlanProduccion as $idProducto => $rows) {
-        foreach ($rows as $r) {
- 
-            $categoria = trim((string)($r['Categoria'] ?? 'SIN CATEGORIA'));
- 
-            if (!isset($porCategoria[$categoria])) {
-                $porCategoria[$categoria] = [];
-            }
- 
-            // Mantenemos estructura original por producto
-            if (!isset($porCategoria[$categoria][$idProducto])) {
-                $porCategoria[$categoria][$idProducto] = [];
-            }
- 
-            $porCategoria[$categoria][$idProducto][] = $r;
-        }
-    }
- 
-    // 2) Reutilizar tu lógica actual por producto
-    $bloquesFinal = [];
- 
-    foreach ($porCategoria as $categoria => $productos) {
- 
-        // 🔥 reutilizas tu función actual
-        $bloquesProductos = agruparPlanPorProductoEtapa($productos);
- 
-        // Totales por categoría
-        $totalesCategoria = [
-            'Reales' => 0,
-            'USTD' => 0,
-            'PlanProduccion' => 0,
-            'DiferenciaUSTD' => 0
-        ];
- 
-        foreach ($bloquesProductos as $p) {
-            $totalesCategoria['Reales'] += $p['totales']['Reales'];
-            $totalesCategoria['USTD'] += $p['totales']['USTD'];
-            $totalesCategoria['PlanProduccion'] += $p['totales']['PlanProduccion'];
-            $totalesCategoria['DiferenciaUSTD'] += $p['totales']['DiferenciaUSTD'];
-        }
- 
-        $bloquesFinal[] = [
-            'categoria' => $categoria,
-            'productos' => $bloquesProductos,
-            'totales' => $totalesCategoria
-        ];
-    }
- 
-    // Ordenar categorías
-    usort($bloquesFinal, fn($a, $b) => strcasecmp($a['categoria'], $b['categoria']));
- 
-    return $bloquesFinal;
-}
+
 
 function agruparPlanPorProductoEtapa(array $dataPlanProduccion): array
 {
@@ -227,20 +172,6 @@ function agruparPlanPorProductoEtapa(array $dataPlanProduccion): array
     return $bloques;
 }
 
-function altoCategoria(array $categoria, float $rowH): float
-{
-    $alto = 0;
-
-    $alto += $rowH; // título categoría
-
-    foreach ($categoria['productos'] as $producto) {
-        $alto += altoBloquePlan($producto, $rowH);
-    }
-
-    $alto += 3; // margen extra
-
-    return $alto;
-}
 
 /* ==============================================
  *   CÁLCULO DE ALTO APROXIMADO DE CADA BLOQUE
@@ -264,189 +195,6 @@ function altoBloquePlan(array $bloque, float $rowH): float
     // margen inferior del bloque
     $alto += 2;
     return $alto;
-}
-
-function dibujarCategoriaFlexible(FPDF $pdf, array &$layout, float &$y, array $categoria, array $st, float $bottomY)
-{
-    $rowH = $st['rowH'];
-    $x = $layout['colX'][$layout['col']];
-    $w = $layout['colW'];
- 
-    // HEADER CATEGORIA
-    if ($y + $rowH > $bottomY) {
-        cambiarColumnaOPagina($pdf, $layout, $y);
-        $x = $layout['colX'][$layout['col']];
-    }
- 
-    $pdf->SetFillColor(40, 90, 160);
-    $pdf->SetTextColor(255, 255, 255);
-    $pdf->SetFont($st['font']['family'], 'B', 8);
- 
-    $pdf->SetXY($x, $y);
-    $pdf->Cell($w, $rowH, mb_convert_encoding($categoria['categoria'], 'ISO-8859-1', 'UTF-8'), 1, 1, 'L', true);
- 
-    $y += $rowH;
- 
-    foreach ($categoria['productos'] as $producto) {
-        dibujarProductoFlexible($pdf, $layout, $y, $producto, $st, $bottomY);
-    }
-}
-
-function dibujarProductoFlexible($pdf, array &$layout, float &$y, array $bloque, array $st, float $bottomY)
-
-{
-
-    $rowH = $st['rowH'];
-
-    $x = $layout['colX'][$layout['col']];
-
-    $w = $layout['colW'];
- 
-    // HEADER PRODUCTO
-
-    if ($y + $rowH > $bottomY) {
-
-        cambiarColumnaOPagina($pdf, $layout, $y);
-
-        $x = $layout['colX'][$layout['col']];
-
-    }
- 
-    $pdf->SetFillColor(205, 221, 250);
-
-    $pdf->SetTextColor(0, 0, 0);
-
-    $pdf->SetFont($st['font']['family'], 'B', 7);
- 
-    $pdf->SetXY($x, $y);
-
-    $pdf->Cell($w, $rowH, mb_convert_encoding($bloque['producto'], 'ISO-8859-1', 'UTF-8'), 1, 1, 'L', true);
- 
-    $y += $rowH;
- 
-    foreach ($bloque['etapas'] as $etapa) {
-
-        dibujarEtapaFlexible($pdf, $layout, $y, $etapa, $st, $bottomY);
-
-    }
-
-}
- 
-function dibujarEtapaFlexible($pdf, array &$layout, float &$y, array $etapa, array $st, float $bottomY)
-{
-    $rowH = $st['rowH'];
-    $x = $layout['colX'][$layout['col']];
-    $w = $layout['colW'];
- 
-    $colsPct = $st['colsPct'];
-    $colsW = [];
-    foreach ($colsPct as $pct) {
-        $colsW[] = round(($w * $pct / 100), 2);
-    }
- 
-    // HEADER ETAPA
-    if ($y + $rowH > $bottomY) {
-        cambiarColumnaOPagina($pdf, $layout, $y);
-        $x = $layout['colX'][$layout['col']];
-    }
- 
-    $pdf->SetFillColor(220, 220, 220);
-    $pdf->SetFont($st['font']['family'], 'B', 6);
- 
-    $pdf->SetXY($x, $y);
-    $pdf->Cell($w, $rowH, mb_convert_encoding($etapa['etapa'], 'ISO-8859-1', 'UTF-8'), 1, 1, 'L', true);
- 
-    $y += $rowH;
- 
-    // HEADERS TABLA
-    if ($y + $rowH > $bottomY) {
-        cambiarColumnaOPagina($pdf, $layout, $y);
-        $x = $layout['colX'][$layout['col']];
-    }
- 
-    $pdf->SetFillColor(65, 147, 199);
-    $pdf->SetTextColor(255, 255, 255);
-    $pdf->SetFont($st['font']['family'], 'B', 5);
- 
-    $pdf->SetXY($x, $y);
-    foreach ($st['labels']['colHeaders'] as $i => $txt) {
-        $pdf->Cell($colsW[$i], $rowH, mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-    }
-    $pdf->Ln();
-    $y += $rowH;
- 
-    // FILAS (AQUÍ ESTÁ EL CONTROL FINO)
-    $pdf->SetTextColor(0, 0, 0);
- 
-    foreach ($etapa['rows'] as $r) {
- 
-        if ($y + $rowH > $bottomY) {
-            cambiarColumnaOPagina($pdf, $layout, $y);
-            $x = $layout['colX'][$layout['col']];
- 
-            // 🔁 repetir headers
-            $pdf->SetFillColor(65, 147, 199);
-            $pdf->SetTextColor(255, 255, 255);
-            $pdf->SetFont($st['font']['family'], 'B', 5);
- 
-            $pdf->SetXY($x, $y);
-            foreach ($st['labels']['colHeaders'] as $i => $txt) {
-                $pdf->Cell($colsW[$i], $rowH, mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            }
-            $pdf->Ln();
-            $y += $rowH;
- 
-            $pdf->SetTextColor(0, 0, 0);
-        }
- 
-        $pdf->SetXY($x, $y);
-        $pdf->SetFont($st['font']['family'], 'B', 4.5);
-        $pdf->Cell($colsW[0], $rowH, $r['Clave'], 1, 0, 'C');
- 
-        $pdf->SetFont($st['font']['family'], '', 4.5);
-        $pdf->Cell($colsW[1], $rowH, mb_convert_encoding($r['Descripcion'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
- 
-        $pdf->Cell($colsW[2], $rowH, number_format($r['Reales']), 1, 0, 'R');
-        $pdf->Cell($colsW[3], $rowH, number_format($r['USTD']), 1, 0, 'R');
-        $pdf->Cell($colsW[4], $rowH, number_format($r['PlanProduccion']), 1, 0, 'R');
-        $pdf->Cell($colsW[5], $rowH, number_format($r['DiferenciaUSTD']), 1, 0, 'R');
- 
-        $pdf->Ln();
-        $y += $rowH;
-    }
- 
-    // TOTAL ETAPA
-    if ($y + $rowH > $bottomY) {
-        cambiarColumnaOPagina($pdf, $layout, $y);
-        $x = $layout['colX'][$layout['col']];
-    }
- 
-    $t = $etapa['totales'];
- 
-    $pdf->SetFillColor(245, 245, 245);
-    $pdf->SetFont($st['font']['family'], 'B', 5);
- 
-    $pdf->SetXY($x, $y);
-    $pdf->Cell($colsW[0] + $colsW[1], $rowH, 'TOTAL TAMAÑO', 1, 0, 'L', true);
- 
-    $pdf->Cell($colsW[2], $rowH, number_format($t['Reales']), 1, 0, 'R', true);
-    $pdf->Cell($colsW[3], $rowH, number_format($t['USTD']), 1, 0, 'R', true);
-    $pdf->Cell($colsW[4], $rowH, number_format($t['PlanProduccion']), 1, 0, 'R', true);
-    $pdf->Cell($colsW[5], $rowH, number_format($t['DiferenciaUSTD']), 1, 0, 'R', true);
- 
-    $pdf->Ln();
-    $y += $rowH + 2;
-}
-
-function cambiarColumnaOPagina($pdf, &$layout, &$y)
-{
-    if ($layout['col'] === 0) {
-        $layout['col'] = 1;
-    } else {
-        $pdf->AddPage();
-        $layout['col'] = 0;
-    }
-    $y = $layout['topY'] + 5;
 }
 
 /* ==============================================
@@ -588,18 +336,33 @@ function imprimirPlanProduccionTablas(FPDF $pdf, array $dataPlanProduccion): voi
         $pdf->AddPage();
 
     // Prepara bloques (producto -> etapas)
-    $categorias = agruparPlanPorCategoriaProductoEtapa($dataPlanProduccion);
+    $bloques = agruparPlanPorProductoEtapa($dataPlanProduccion);
 
-$layout = [
-    'col' => 0,
-    'colX' => $colX,
-    'colW' => $colW,
-    'topY' => $topY
-];
-$y = $topY + 5;
-foreach ($categorias as $categoria) {
-    dibujarCategoriaFlexible($pdf, $layout, $y, $categoria, $st, $bottomY);
-}
+    $col = 0;          // 0 izquierda, 1 derecha
+    $y = $topY + 5;
+
+    $pdf->SetAutoPageBreak(false); // control manual
+
+    foreach ($bloques as $bloque) {
+        $hEstimado = altoBloquePlan($bloque, $rowH);
+
+        // ¿Cabe en la columna actual?
+        if ($y + $hEstimado > $bottomY) {
+            // Cambia a la otra columna o nueva página
+            if ($col === 0) {
+                $col = 1;
+                $y = $topY + 5;
+            } else {
+                $pdf->AddPage();
+                $col = 0;
+                $y = $topY + 5;
+            }
+        }
+
+        // Dibuja bloque en (colX[$col], y) con ancho colW
+        $altoUsado = dibujarBloquePlan($pdf, $colX[$col], $y, $colW, $bloque, $st);
+        $y += $altoUsado;
+    }
 }
 
 imprimirPlanProduccionTablas($pdf, $dataPlanProduccion);
