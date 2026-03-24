@@ -1,368 +1,337 @@
-Tengo todo este codigo
-
-function planStyles(): array
-{
-    return [
-        'margins' => ['l' => 10, 't' => 12, 'r' => 10, 'b' => 12],
-        'gutter' => 6,          // separación entre columnas
-        'rowH' => 6,          // alto de fila
-        'font' => ['family' => 'Arial'], // fuente base
-        'colors' => [
-            'headerBlue' => [65, 147, 199],   // barra de título/encabezado
-            'subHeader' => [220, 220, 220], // subencabezado gris claro
-            'band' => [245, 245, 245], // banda total
-            'textLight' => [255, 255, 255], // texto sobre azul
-            'textDark' => [0, 0, 0],
-            'line' => [150, 150, 150],
-        ],
-        // Anchos relativos de columnas dentro de la tabla:
-        // CLAVE, DESCRIPCION, REALES, STD, PROGRAMA, DIF
-        'colsPct' => [8, 49, 10, 10, 13, 10],
-        // Texto de títulos
-        'labels' => [
-            'producto' => 'TIPO PAÑAL',
-            'tamano' => 'TAMAÑO PAÑAL',
-            'totalTamano' => 'TOTAL TAMAÑO',
-            'totalTipo' => 'TOTAL TIPO',
-            'colHeaders' => ['CLAVE', 'DESCRIPCIÓN', 'REALES', 'STD', 'PROGRAMA', 'DIF'],
-        ]
-    ];
-}
-
-
-function ordenEtapaIndex(string $etapa): int
-{
-    // Mapeo con normalización básica (lowercase y sin espacios extra).
-    // Agregamos alias comunes por si el SP cambia mayúsculas o tildes.
-    $map = [
-        'recién nacido' => 1,
-        'chico' => 2,
-        'mediano' => 3,
-        'grande' => 4,
-        'jumbo' => 5,
-        'extra jumbo' => 6,
-    ];
-
-    // Normalizar: lower, trim y colapsar espacios
-    $e = mb_strtolower(trim($etapa), 'UTF-8');
-    $e = preg_replace('/\s+/', ' ', $e ?? '');
-
-    return $map[$e] ?? 1000; // no mapeado => al final
-}
-
-
-function agregarFilasPorClave(array $list): array
-{
-    $byClave = [];
-
-    foreach ($list as $r) {
-        $clave = (string) ($r['Clave'] ?? '');
-        if ($clave === '')
-            continue;
-
-        if (!isset($byClave[$clave])) {
-            $byClave[$clave] = [
-                'Clave' => $clave,
-                'Descripcion' => (string) ($r['Descripcion'] ?? ''),
-                'Reales' => 0.0,
-                'USTD' => 0.0,
-                'PlanProduccion' => 0.0,
-                'DiferenciaUSTD' => 0.0,
-            ];
+var data =  {
+    "15": [
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71279     ",
+            "Descripcion": "Depend Nocturno Mediano 10's X 6 Nuevo Dise\u00f1o",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 3,
+            "Etapa": "Mediano",
+            "idCategoria": 6,
+            "Categoria": "Pañal Abierto",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 4000,
+            "DiferenciaUSTD": 4000
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71281     ",
+            "Descripcion": "Depend Pañal Oxido de Cobre Mediano 10's X 6 Nuevo Dise\u00f1o",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 3,
+            "Etapa": "Mediano",
+            "idCategoria": 6,
+            "Categoria": "Pañal Abierto",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 1000,
+            "DiferenciaUSTD": 1000
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71285     ",
+            "Descripcion": "Depend Predoblado 10's X 6 Nuevo Dise\u00f1o",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 7,
+            "Etapa": "Unitalla",
+            "idCategoria": 7,
+            "Categoria": "Predoblado",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 1630,
+            "DiferenciaUSTD": 1630
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71286     ",
+            "Descripcion": "Predoblado Depend 18's X 4 Nuevo Dise\u00f1o",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 7,
+            "Etapa": "Unitalla",
+            "idCategoria": 7,
+            "Categoria": "Predoblado",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 4770,
+            "DiferenciaUSTD": 4770
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71210     ",
+            "Descripcion": "Ropa Interior Mujer WW 2.0 Med 15's x 8",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 3,
+            "Etapa": "Mediano",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 17000,
+            "DiferenciaUSTD": 17000
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71211     ",
+            "Descripcion": "Ropa Interior Mujer WW 2.0 Gde 15's x 8",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 4,
+            "Etapa": "Grande",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 1920,
+            "USTD": 3176.0000000000005,
+            "PlanProduccion": 3200,
+            "DiferenciaUSTD": 23.999999999999545
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71214     ",
+            "Descripcion": "RI Derma Protect Unisex Med 15's x 8",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 3,
+            "Etapa": "Mediano",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 5000,
+            "DiferenciaUSTD": 5000
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71215     ",
+            "Descripcion": "RI Derma Protect Unisex Gde 15's x 8",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 4,
+            "Etapa": "Grande",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 923,
+            "USTD": 738.4000000000001,
+            "PlanProduccion": 2500,
+            "DiferenciaUSTD": 1761.6
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71603     ",
+            "Descripcion": "RI Derma Protect Unisex Gde 18's x 8",
+            "idProducto": 15,
+            "Producto": "Depend",
+            "idEtapa": 4,
+            "Etapa": "Grande",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 4200,
+            "DiferenciaUSTD": 4200
         }
-
-        // Mantener la descripción "más informativa" (la más larga/no vacía)
-        $descNueva = (string) ($r['Descripcion'] ?? '');
-        if ($descNueva !== '' && mb_strlen($descNueva, 'UTF-8') > mb_strlen($byClave[$clave]['Descripcion'], 'UTF-8')) {
-            $byClave[$clave]['Descripcion'] = $descNueva;
+    ],
+    "16": [
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71369     ",
+            "Descripcion": "Diapro Mediano 10's X 4",
+            "idProducto": 16,
+            "Producto": "Diapro",
+            "idEtapa": 3,
+            "Etapa": "Mediano",
+            "idCategoria": 6,
+            "Categoria": "Pañal Abierto",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 5500,
+            "DiferenciaUSTD": 5500
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71371     ",
+            "Descripcion": "Diapro Predoblado 10's X 8",
+            "idProducto": 16,
+            "Producto": "Diapro",
+            "idEtapa": 7,
+            "Etapa": "Unitalla",
+            "idCategoria": 7,
+            "Categoria": "Predoblado",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 1997,
+            "USTD": 2000.882,
+            "PlanProduccion": 13300,
+            "DiferenciaUSTD": 11299.118
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71372     ",
+            "Descripcion": "Diapro Predoblado Clubes 10's X 34",
+            "idProducto": 16,
+            "Producto": "Diapro",
+            "idEtapa": 7,
+            "Etapa": "Unitalla",
+            "idCategoria": 7,
+            "Categoria": "Predoblado",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 4740,
+            "DiferenciaUSTD": 4740
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71365     ",
+            "Descripcion": "Ropa Interior Diapro Med 12's x 8",
+            "idProducto": 16,
+            "Producto": "Diapro",
+            "idEtapa": 3,
+            "Etapa": "Mediano",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 15240,
+            "DiferenciaUSTD": 15240
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "71366     ",
+            "Descripcion": "Ropa Interior Diapro Gde 12's x 8",
+            "idProducto": 16,
+            "Producto": "Diapro",
+            "idEtapa": 4,
+            "Etapa": "Grande",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 14290,
+            "DiferenciaUSTD": 14290
         }
-
-        // Sumar métricas
-        $byClave[$clave]['Reales'] += (float) ($r['Reales'] ?? 0);
-        $byClave[$clave]['USTD'] += (float) ($r['USTD'] ?? 0);
-        $byClave[$clave]['PlanProduccion'] += (float) ($r['PlanProduccion'] ?? 0);
-        $byClave[$clave]['DiferenciaUSTD'] += (float) ($r['DiferenciaUSTD'] ?? 0);
-    }
-
-    // Orden por Clave (natural, útil si son numéricas)
-    ksort($byClave, SORT_NATURAL);
-
-    // Si prefieres ordenar por Descripción:
-    // usort($byClave, fn($a, $b) => strcasecmp($a['Descripcion'], $b['Descripcion']));
-
-    return array_values($byClave);
+    ],
+    "23": [
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "e9402     ",
+            "Descripcion": "Depend Max Brief S\/M 20 x 3 NEBULA",
+            "idProducto": 23,
+            "Producto": "Briefs",
+            "idEtapa": 3,
+            "Etapa": "Mediano",
+            "idCategoria": 6,
+            "Categoria": "Pañal Abierto",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 2805,
+            "USTD": 1930,
+            "PlanProduccion": 2070,
+            "DiferenciaUSTD": 140
+        },
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "e9403     ",
+            "Descripcion": "Depend Max Brief L\/XL 16 X 3 NEBULA",
+            "idProducto": 23,
+            "Producto": "Briefs",
+            "idEtapa": 4,
+            "Etapa": "Grande",
+            "idCategoria": 6,
+            "Categoria": "Pañal Abierto",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 1711,
+            "DiferenciaUSTD": 1711
+        }
+    ],
+    "18": [
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "70968     ",
+            "Descripcion": "MembersMark Predoblado Gel Clubes Pallet 40 x 34 SAMS",
+            "idProducto": 18,
+            "Producto": "Member's Mark",
+            "idEtapa": 7,
+            "Etapa": "Unitalla",
+            "idCategoria": 7,
+            "Categoria": "Predoblado",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 8500,
+            "DiferenciaUSTD": 8500
+        }
+    ],
+    "20": [
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "E9387     ",
+            "Descripcion": "UnderPad 18\/2 Sure & Fresh Price 2's x 18",
+            "idProducto": 20,
+            "Producto": "Sure & Fresh",
+            "idEtapa": 7,
+            "Etapa": "Unitalla",
+            "idCategoria": 7,
+            "Categoria": "Predoblado",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 470,
+            "DiferenciaUSTD": 470
+        }
+    ],
+    "22": [
+        {
+            "Fecha": "2026-03-01",
+            "Clave": "E9012     ",
+            "Descripcion": "RI Plenitud Classic G\/XG 2x24 Frida",
+            "idProducto": 22,
+            "Producto": "Classic",
+            "idEtapa": 4,
+            "Etapa": "Grande",
+            "idCategoria": 8,
+            "Categoria": "Ropa Interior",
+            "NoDepto": 25,
+            "NombreDepto": "Incontinencia",
+            "Reales": 0,
+            "USTD": 0,
+            "PlanProduccion": 1700,
+            "DiferenciaUSTD": 1700
+        }
+    ]
 }
-
-
-
-function agruparPlanPorProductoEtapa(array $dataPlanProduccion): array
-{
-    $bloques = [];
-    foreach ($dataPlanProduccion as $idProducto => $rows) {
-        if (empty($rows))
-            continue;
-
-        $productoNombre = $rows[0]['Producto'] ?? ('Producto ' . $idProducto);
-
-        // 1) AGRUPAMOS POR ETAPA (tamaño)
-        $porEtapa = [];
-        foreach ($rows as $r) {
-            $etapa = trim((string) ($r['Etapa'] ?? 'SIN ETAPA'));
-            if (!isset($porEtapa[$etapa]))
-                $porEtapa[$etapa] = [];
-            $porEtapa[$etapa][] = [
-                'Clave' => (string) ($r['Clave'] ?? ''),
-                'Descripcion' => (string) ($r['Descripcion'] ?? ''),
-                'Reales' => (float) ($r['Reales'] ?? 0),
-                'USTD' => (float) ($r['USTD'] ?? 0),
-                'PlanProduccion' => (float) ($r['PlanProduccion'] ?? 0),
-                'DiferenciaUSTD' => (float) ($r['DiferenciaUSTD'] ?? 0),
-            ];
-        }
-
-        // 2) DENTRO DE CADA ETAPA, TOTALIZAMOS POR CLAVE
-        $totalesProducto = ['Reales' => 0, 'USTD' => 0, 'PlanProduccion' => 0, 'DiferenciaUSTD' => 0];
-        $etapasList = [];
-        foreach ($porEtapa as $etapa => $listRaw) {
-
-            // ← totalizador por clave
-            $rowsAgg = agregarFilasPorClave($listRaw);
-
-            // Totales por etapa (de las filas ya agregadas)
-            $t = ['Reales' => 0, 'USTD' => 0, 'PlanProduccion' => 0, 'DiferenciaUSTD' => 0];
-            foreach ($rowsAgg as $r) {
-                $t['Reales'] += $r['Reales'];
-                $t['USTD'] += $r['USTD'];
-                $t['PlanProduccion'] += $r['PlanProduccion'];
-                $t['DiferenciaUSTD'] += $r['DiferenciaUSTD'];
-            }
-
-            // Acumular al total de producto
-            $totalesProducto['Reales'] += $t['Reales'];
-            $totalesProducto['USTD'] += $t['USTD'];
-            $totalesProducto['PlanProduccion'] += $t['PlanProduccion'];
-            $totalesProducto['DiferenciaUSTD'] += $t['DiferenciaUSTD'];
-
-            $etapasList[] = [
-                'etapa' => $etapa,
-                'rows' => $rowsAgg, // ← filas agregadas por clave
-                'totales' => $t
-            ];
-        }
-
-        // 3) ORDENAR ETAPAS SEGÚN TU JERARQUÍA
-        usort($etapasList, function ($a, $b) {
-            $ia = ordenEtapaIndex($a['etapa']);
-            $ib = ordenEtapaIndex($b['etapa']);
-            if ($ia === $ib)
-                return strcasecmp($a['etapa'], $b['etapa']);
-            return $ia <=> $ib;
-        });
-
-        $bloques[] = [
-            'producto' => $productoNombre,
-            'etapas' => $etapasList,
-            'totales' => $totalesProducto
-        ];
-    }
-
-    // (Opcional) ordenar productos por nombre
-    usort($bloques, fn($a, $b) => strcasecmp($a['producto'], $b['producto']));
-
-    return $bloques;
-}
-
-
-/* ==============================================
- *   CÁLCULO DE ALTO APROXIMADO DE CADA BLOQUE
- * ============================================== */
-function altoBloquePlan(array $bloque, float $rowH): float
-{
-    // Estructura: barra título producto (rowH), por cada etapa:
-    //   barra etapa (rowH), encabezados (rowH), N filas * rowH, total tamaño (rowH)
-    // Al final, total tipo (rowH)
-    $alto = 0;
-    $alto += $rowH; // título producto
-    foreach ($bloque['etapas'] as $etapa) {
-        $alto += $rowH; // barra etapa
-        $alto += $rowH; // encabezados
-        $alto += count($etapa['rows']) * $rowH; // filas
-        $alto += $rowH; // total tamaño
-        // separador sutil entre etapas (opcional)
-        $alto += 1.5;
-    }
-    $alto += $rowH; // total tipo
-    // margen inferior del bloque
-    $alto += 2;
-    return $alto;
-}
-
-/* ==============================================
- *   DIBUJA UN BLOQUE (PRODUCTO y sus ETAPAS)
- *   Devuelve altura usada efectiva.
- * ============================================== */
-
-function dibujarBloquePlan(FPDF $pdf, float $x, float $y, float $w, array $bloque, array $st): float
-{
-    $rowH = $st['rowH'] - 3;
-    $cBlue = $st['colors']['headerBlue'];
-    $cSub = $st['colors']['subHeader'];
-    $cBand = $st['colors']['band'];
-    $cWhite = $st['colors']['textLight'];
-    $cBlack = $st['colors']['textDark'];
-    $labels = $st['labels'];
-    $colsPct = $st['colsPct'];
-
-    // Cálculo de anchos reales por porcentajes
-    $colsW = [];
-    foreach ($colsPct as $pct)
-        $colsW[] = round(($w * $pct / 100), 2);
-
-    // --- Título de producto (barra azul) ---
-    $pdf->SetFillColor(205, 221, 250);
-    $pdf->SetTextColor(0, 0, 0);
-    $pdf->SetFont($st['font']['family'], 'B', 7);
-    $pdf->SetXY($x, $y);
-    $pdf->Cell($w, $rowH, mb_convert_encoding($bloque['producto'], 'ISO-8859-1', 'UTF-8'), 1, 1, '0', true);
-
-    $yActual = $y + $rowH;
-
-    // Por cada etapa (tamaño)
-    foreach ($bloque['etapas'] as $etapa) {
-
-        // Subtítulo de etapa (gris)
-        $pdf->SetFillColor($cSub[0], $cSub[1], $cSub[2]);
-        $pdf->SetTextColor($cBlack[0], $cBlack[1], $cBlack[2]);
-        $pdf->SetFont($st['font']['family'], 'B', 6);
-        $pdf->SetXY($x, $yActual);
-        $pdf->Cell($w, $rowH, trim(mb_convert_encoding($etapa['etapa'], 'ISO-8859-1', 'UTF-8')), 1, 1, 'L', true);
-        $yActual += $rowH;
-
-        // Encabezados de columnas (azul)
-        $pdf->SetFillColor($cBlue[0], $cBlue[1], $cBlue[2]);
-        $pdf->SetTextColor($cWhite[0], $cWhite[1], $cWhite[2]);
-        $pdf->SetFont($st['font']['family'], 'B', 5);
-        $pdf->SetXY($x, $yActual);
-        foreach ($labels['colHeaders'] as $i => $txt) {
-            $pdf->Cell($colsW[$i], $rowH, mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        }
-        $pdf->Ln();
-        $yActual += $rowH;
-
-        // Filas
-
-        $pdf->SetTextColor($cBlack[0], $cBlack[1], $cBlack[2]);
-        foreach ($etapa['rows'] as $r) {
-            $pdf->SetXY($x, $yActual);
-            $pdf->SetFont($st['font']['family'], 'B', 4.5);
-            $pdf->Cell($colsW[0], $rowH, preg_replace('/\s+/', '', (string) $r['Clave']), 1, 0, 'C');
-            // Descripción (alineación izquierda, trunc simple si excede)
-            $pdf->SetFont($st['font']['family'], '', 4.5);
-            $desc = mb_strtoupper(mb_convert_encoding((string) $r['Descripcion'], 'ISO-8859-1', 'UTF-8'));
-            $pdf->Cell($colsW[1], $rowH, $desc, 1, 0, 'L');
-            $pdf->Cell($colsW[2], $rowH, number_format((float) $r['Reales']), 1, 0, 'R');
-            $pdf->Cell($colsW[3], $rowH, number_format((float) $r['USTD']), 1, 0, 'R');
-            $pdf->Cell($colsW[4], $rowH, number_format((float) $r['PlanProduccion']), 1, 0, 'R');
-            $pdf->Cell($colsW[5], $rowH, number_format((float) $r['DiferenciaUSTD']), 1, 0, 'R');
-            $pdf->Ln();
-            $yActual += $rowH;
-        }
-
-        // Total tamaño (banda gris clara)
-        $t = $etapa['totales'];
-        $pdf->SetFillColor($cBand[0], $cBand[1], $cBand[2]);
-        $pdf->SetFont($st['font']['family'], 'B', 5);
-        $pdf->SetXY($x, $yActual);
-        // Colspan primeras dos columnas
-        $pdf->Cell($colsW[0] + $colsW[1], $rowH, mb_convert_encoding($labels['totalTamano'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-        $pdf->SetFont($st['font']['family'], 'B', 5);
-        $pdf->Cell($colsW[2], $rowH, number_format($t['Reales']), 1, 0, 'R', true);
-        $pdf->Cell($colsW[3], $rowH, number_format($t['USTD']), 1, 0, 'R', true);
-        $pdf->Cell($colsW[4], $rowH, number_format($t['PlanProduccion']), 1, 0, 'R', true);
-        $pdf->Cell($colsW[5], $rowH, number_format($t['DiferenciaUSTD']), 1, 0, 'R', true);
-        $pdf->Ln();
-        $yActual += $rowH;
-
-        // separador entre etapas
-        $yActual += 1.5;
-    }
-
-    // Total tipo (producto) - barra azul
-    $T = $bloque['totales'];
-    $pdf->SetFillColor($cBlue[0], $cBlue[1], $cBlue[2]);
-    $pdf->SetTextColor($cWhite[0], $cWhite[1], $cWhite[2]);
-    $pdf->SetFont($st['font']['family'], 'B', 6);
-    $pdf->SetXY($x, $yActual);
-    $pdf->Cell($colsW[0] + $colsW[1], $rowH, $labels['totalTipo'], 1, 0, 'L', true);
-    $pdf->SetFillColor($cBand[0], $cBand[1], $cBand[2]);
-    $pdf->SetTextColor($cBlack[0], $cBlack[1], $cBlack[2]);
-    $pdf->SetFont($st['font']['family'], 'B', 5);
-    $pdf->Cell($colsW[2], $rowH, number_format($T['Reales']), 1, 0, 'R', true);
-    $pdf->Cell($colsW[3], $rowH, number_format($T['USTD']), 1, 0, 'R', true);
-    $pdf->Cell($colsW[4], $rowH, number_format($T['PlanProduccion']), 1, 0, 'R', true);
-    $pdf->Cell($colsW[5], $rowH, number_format($T['DiferenciaUSTD']), 1, 0, 'R', true);
-    $pdf->Ln();
-    $yActual += $rowH;
-
-    // margen inferior del bloque
-    $yActual += 2;
-
-    return ($yActual - $y);
-}
-
-/* =======================================================
- *   LAYOUT EN 2 COLUMNAS (arriba → abajo, luego a la otra)
- * ======================================================= */
-function imprimirPlanProduccionTablas(FPDF $pdf, array $dataPlanProduccion): void
-{
-    $st = planStyles();
-    $m = $st['margins'];
-    $gutter = $st['gutter'];
-    $rowH = $st['rowH'];
-
-    // Página y geometría
-    $pageW = $pdf->GetPageWidth();
-    $pageH = $pdf->GetPageHeight();
-    $contentW = $pageW - $m['l'] - $m['r'];
-    $colW = ($contentW - $gutter) / 2;
-
-    // Puntos de columna
-    $colX = [$m['l'], $m['l'] + $colW + $gutter];
-    $topY = $m['t'];
-    $bottomY = $pageH - $m['b'];
-
-    // Si no hay página activa, crea una
-    if ($pdf->PageNo() === 0)
-        $pdf->AddPage();
-
-    // Prepara bloques (producto -> etapas)
-    $bloques = agruparPlanPorProductoEtapa($dataPlanProduccion);
-
-    $col = 0;          // 0 izquierda, 1 derecha
-    $y = $topY + 5;
-
-    $pdf->SetAutoPageBreak(false); // control manual
-
-    foreach ($bloques as $bloque) {
-        $hEstimado = altoBloquePlan($bloque, $rowH);
-
-        // ¿Cabe en la columna actual?
-        if ($y + $hEstimado > $bottomY) {
-            // Cambia a la otra columna o nueva página
-            if ($col === 0) {
-                $col = 1;
-                $y = $topY + 5;
-            } else {
-                $pdf->AddPage();
-                $col = 0;
-                $y = $topY + 5;
-            }
-        }
-
-        // Dibuja bloque en (colX[$col], y) con ancho colW
-        $altoUsado = dibujarBloquePlan($pdf, $colX[$col], $y, $colW, $bloque, $st);
-        $y += $altoUsado;
-    }
-}
-
-imprimirPlanProduccionTablas($pdf, $dataPlanProduccion);
